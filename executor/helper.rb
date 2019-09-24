@@ -13,7 +13,12 @@ else
   puts "please save your default config settings at #{ENV['HOME']}/.xirrus-auto \n"
   puts "copy the dot_xirrus-auto_example file to ~/.xirrus-auto and modify for your settings\n"
 end
+def log(text)
+  if File.exists?(@log_file)
 
+    File.open(@log_file,'a'){|f| f.puts(text) }
+  end
+end
 def api
   API::ApiClient.new(args={username: @username, password: @password, host: @login_url})
 end

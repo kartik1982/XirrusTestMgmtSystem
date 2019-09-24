@@ -19,7 +19,7 @@ module EXECUTOR
     $pass_count =0
     $fail_count=0
     $pending_count=0
-    project_id = args[:project_id]|| gem_root.split('/').last
+    project_id = args[:project_id]
     testcycle_id = args[:testcycle_id]
     release_id = args[:release_id] || "0.0.0"
     build_id=  args[:build_id] || "0000-0000"
@@ -54,8 +54,7 @@ module EXECUTOR
       array: array,
       array_serial: array_serial,
       telnet: telnet,
-      skip_api: skip_api
-      
+      skip_api: skip_api      
     })
     
     specs.each do |spec|
@@ -295,10 +294,10 @@ module EXECUTOR
                    else
                      needed_version_number = nil
                    end
-                   puts("CURRENT BUILD FOR THE APPLICATION: #{needed_version_number}")
+                   log("CURRENT BUILD FOR THE APPLICATION: #{needed_version_number}")
                  end
-                 puts("USER ACCOUNT: #{@username}")
-                 puts("_________________________________________________________________________________")
+                 log("USER ACCOUNT: #{@username}")
+                 log("_________________________________________________________________________________")
                  if @ui.toast_dialog.present?
                    @ui.toast_dialog_ok_button.click
                    @ui.toast_dialog.wait_while_present

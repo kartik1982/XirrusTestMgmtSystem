@@ -5,6 +5,7 @@ require_relative "./resource/arrays.rb"
 require_relative "./resource/groups.rb"
 require_relative "./resource/profiles.rb"
 require_relative "./resource/easypass.rb"
+require_relative "./resource/tenants.rb"
 
 module API
     
@@ -14,6 +15,7 @@ module API
     include Groups
     include Profiles
     include Easypass
+    include Tenants
     
     attr_accessor :api_url, :username, :password, :token, :key_secret, :key_secret
     def initialize(args={})
@@ -32,8 +34,8 @@ module API
         }
     end
     
-    def get_api(resource_path)   
-      get(api_common_params.update({resource_path: resource_path, load: {}}))
+    def get_api(resource_path, params)   
+      get(api_common_params.update({resource_path: resource_path, load: params}))
     end
     def post_api(resource_path, load)   
       post(api_common_params.update({resource_path: resource_path, load: load}))
@@ -138,7 +140,12 @@ module API
       begin
         case _method
         when :get
-          response =RestClient.get(path, headers)
+          if !load.empty?
+            load.each do |key, value|
+              path = path+"&#{key}=#{value}"
+            end
+          end
+          response =RestClient.get(path, headers)         
         when :put
           response =RestClient.put(path, load.to_json, headers)
         when :post
