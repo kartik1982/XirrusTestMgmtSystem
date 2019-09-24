@@ -134,6 +134,14 @@ module EXECUTOR
   end #run_specs
   def self.spec_helper(settings={})
     spec_settings = settings || {}
+    #static variables
+    $the_environment_used = spec_settings[:env] || "test03"
+    $the_browser_used = spec_settings[:browser_name] || BROWSER_NAME
+    $azure_user= "adinte@alexxirrusoutlook.onmicrosoft.com"
+    $azure_password= "Xirrus!234"
+    $google_user="kartik@xirrus.org"
+    $google_password="Xirrus!23"
+    #Custom paramters    
     RSpec.configuration.add_setting :spec_settings
     RSpec.configuration.spec_settings = spec_settings
     RSpec.configuration.add_formatter 'progress'
@@ -317,7 +325,7 @@ module EXECUTOR
       end #Before all
       #BEFORE EACH TESTCASE
       config.before :each do |example|
-        puts ("Example Description --> #{example.description} - #{Time.now}")
+        log("Example Description --> #{example.description} - #{Time.now}")
         unless (spec_settings[:ui] == false || spec_settings[:ui] == "false")          
           if @ui.toast_dialog.present?
              @ui.toast_dialog_ok_button.click
