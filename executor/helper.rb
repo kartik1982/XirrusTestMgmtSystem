@@ -1,6 +1,14 @@
+require 'rspec'
+require 'watir'
 require 'pathname'
+require 'rest-client'
 require 'net/ssh'
 require 'net/scp'
+require 'logger'
+require 'json'
+require 'optparse'
+require 'headless'
+require 'time_diff'
 
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"

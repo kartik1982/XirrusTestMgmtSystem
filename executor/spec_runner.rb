@@ -1,6 +1,3 @@
-require 'rspec'
-require 'watir'
-
 require_relative "report_status_formatter.rb"
 
 module EXECUTOR
