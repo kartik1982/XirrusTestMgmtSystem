@@ -381,7 +381,7 @@ shared_examples "verify limited time offer expired on portals" do
       expect(@ui.css('#toast-container .toast-warning .toast-message').text).to include("The EasyPass subscription for this account has expired.")
       expect(@ui.css('#toast-container .toast-warning .toast-message').text).to include("Without an active subscription, users will only be able to access Self-Registration and Ambassador portals.")
       expect(@ui.css('#toast-container .toast-warning .toast-message').text).to include("We highly recommend renewing your EasyPass subscription through your reseller to restore full access for all EasyPass portal types.")
-      expect(@ui.css('#toast-container .toast-warning .toast-message').text).to include("If you have any questions for Xirrus regarding, please contact our sales team at xirrusrenewals@cambiumnetworks.com.")
+      expect(@ui.css('#toast-container .toast-warning .toast-message').text).to include("If you have any questions for Cambium Networks, please contact our sales team at xirrusrenewals@cambiumnetworks.com.")
       @ui.click("#toast-container .toast-warning button")
       sleep 1
       @ui.css('#toast-container .toast-warning').wait_while_present

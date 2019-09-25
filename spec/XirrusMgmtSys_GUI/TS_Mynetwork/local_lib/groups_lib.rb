@@ -407,6 +407,9 @@ shared_examples "edit group" do |location, group_name, edit_values_hash| # Creat
 						@ui.click('#groups_newGroup .commonTitle') and sleep 0.6
 						expect(@ui.get(:textarea , {css: description_css}).value).to eq(edit_values_hash[key])
 					when "Group AP(s)"
+					  #Select Unassigned access point from dropdown
+            @ui.set_dropdown_entry_by_path("#dual_lists .lhs .search .ko_dropdownlist", "Unassigned Access Points")
+            sleep 2
 						already_added_aps = @ui.css('#dual_lists #rhs_selector ul').lis
 						if already_added_aps.length > 0
 							already_added_aps.each do |ap|

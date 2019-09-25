@@ -885,6 +885,12 @@ shared_examples "verify Location Reporting on floor plan" do |building_name|
      expect(@ui.css('.floorplan_btn.floorplan_showstations.disabled')).to exist
      expect(@ui.css('.floorplan_btn.floorplan_showrogues.disabled')).to exist
    end  
+   it "press the 'Done' button" do
+     if @ui.css('#fp_done').present?
+         @ui.click('#fp_done')
+         sleep 3
+      end
+   end
  end
 end
 shared_examples "Verify Location Reporting enable-disable" do |building_name|
