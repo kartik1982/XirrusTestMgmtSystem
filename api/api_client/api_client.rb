@@ -43,6 +43,9 @@ module API
     def put_api(resource_path, load)   
       put(api_common_params.update({resource_path: resource_path, load: load}))
     end
+    def delete_api(resource_path)   
+      delete(api_common_params.update({resource_path: resource_path, load: {}}))
+    end
     
     def get_access_token
       api_url= @api_url

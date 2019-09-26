@@ -23,4 +23,12 @@ module Tenants
   def post_add_arrays_to_tenant(tenant_id, arrays_load)
     post_api("tenants.json/#{tenant_id}/arrays", arrays_load)
   end
+  #DELETE /tenants.json/{tenantId}
+  def delete_tenant_by_tenantid(tenant_id)
+    delete_api("tenants.json/#{tenant_id}")
+  end
+  def delete_tenant_by_name(tenant_name)
+    tenant_id= JSON.parse(get_tenant_by_name(tenant_name).body)['data'][0]['id']
+    delete_tenant_by_tenantid(tenant_id)
+  end
 end
