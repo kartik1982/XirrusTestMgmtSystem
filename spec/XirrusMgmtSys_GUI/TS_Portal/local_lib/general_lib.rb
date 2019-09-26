@@ -971,6 +971,7 @@ end
 shared_examples "update login domains" do |portal_name, portal_type, login_domain|
   describe "Update the login domain to '#{login_domain}' - #{portal_type.upcase}" do
     it "Update, save and verify that the portal Login Domains can be saved with the value: #{login_domain}" do #www.myDomain.com, www.myDomain.co.uk, www.myDomain.ro, www.myDomain.org, www.myDomain.test
+      @browser.execute_script('$("#suggestion_box").hide()')
       previous_ul_entries = @ui.css('#guestportal_config_general_domain ul').lis.length
       login_domains_add_procedure(portal_type, login_domain)
       sleep 1
@@ -992,6 +993,7 @@ shared_examples "update login domains add dont delete" do |portal_name, portal_t
   describe "Update the login domain to '#{login_domains.length}' for #{portal_type.upcase} '#{portal_name}'" do
     login_domains.each do |login_domain|
       it "Update, save and verify that the portal Login Domains can be saved with the value: #{login_domain}" do #www.myDomain.com, www.myDomain.co.uk, www.myDomain.ro, www.myDomain.org, www.myDomain.test
+        @browser.execute_script('$("#suggestion_box").hide()')
         login_domains_add_procedure(portal_type, login_domain)
       end
     end
@@ -1001,6 +1003,7 @@ end
 shared_examples "update login domains dont delete" do |portal_name, portal_type, login_domain|
   describe "Update the login domain to '#{login_domain}' - #{portal_type.upcase}" do
     it "Update, save and verify that the portal Login Domains can be saved with the value: #{login_domain}" do #www.myDomain.com, www.myDomain.co.uk, www.myDomain.ro, www.myDomain.org, www.myDomain.test
+      @browser.execute_script('$("#suggestion_box").hide()')
       login_domains_add_procedure(portal_type, login_domain)
     end
   end
