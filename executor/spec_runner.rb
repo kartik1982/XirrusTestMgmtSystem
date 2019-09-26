@@ -8,6 +8,9 @@ module EXECUTOR
   def self.spec_root
     "#{self.gem_root}/spec"
   end
+  def self.fixtures_root
+    "#{self.gem_root}/fixtures"
+  end
   def self.run_spec(command)
     RSpec::Core::Runner.run(command)
   end
