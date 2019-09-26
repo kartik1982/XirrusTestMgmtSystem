@@ -10,7 +10,7 @@ tenant_id=nil
 describe "********** TEST CASE: PORTAL EXPIRATION - Modify the tenant's 'easypassPortalExpiration', 'easypassExpirationEnforcement' and 'allowEasypass' values **********" do
   context "********** Set tenant expiration for fature date **********" do
       it "Set tenant expiration for feature date to verify will expired mesage" do        
-        tenant_body = JSON.parse(@api.tenant_by_name(tenant_name).body)['data'].first
+        tenant_body = JSON.parse(@api.get_tenant_by_name(tenant_name).body)['data'].first
         tenant_id = tenant_body['id']
         tenant_body.update({'tenantProperties' => {'easypassPortalExpiration' => DateTime.now + 30}})
         response = @api.put_update_tenant_by_tenantid(tenant_id, tenant_body)

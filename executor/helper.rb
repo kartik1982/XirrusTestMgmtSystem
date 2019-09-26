@@ -13,6 +13,7 @@ require 'time_diff'
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"
 require_relative "../gui/ui.rb"
+require_relative "../arrays/array.rb"
 
 pn = Pathname.new("xirrus-auto")
 if pn.exist?

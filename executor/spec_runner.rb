@@ -185,9 +185,9 @@ module EXECUTOR
             # TODO add alternate way to create array - from backoffice json
             # XMS::Array - needs backoffice_json_to_attributes method and/or add
               if File.exist? "#{EXECUTOR.fixtures_root}/json/#{array_serial}.json"
-                @array = EXECUTOR::Array.new(json_file: "#{EXECUTOR.fixtures_root}/json/#{array_serial}.json")
+                @array = Arrays::Array.new(json_file: "#{EXECUTOR.fixtures_root}/json/#{array_serial}.json")
               else
-                @array = EXECUTOR::Array.new(serial: array_serial)
+                @array = Arrays::Array.new(serial: array_serial)
               end
             end
           end

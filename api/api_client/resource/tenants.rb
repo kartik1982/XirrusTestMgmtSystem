@@ -8,11 +8,19 @@ module Tenants
     get_api("tenants.json/search", params={search: filter})  
   end
   #GET /tenants.json/name/{tenantName}
-  def tenant_by_name(tenant_name)   
+  def get_tenant_by_name(tenant_name)   
     get_api("tenants.json/name/#{tenant_name}", {})  
   end
   #PUT /tenants.json/{tenantId}
   def put_update_tenant_by_tenantid(tenant_id, tenant_load)
     put_api("tenants.json/#{tenant_id}", tenant_load)
+  end
+  #GET /tenants.json/current
+  def get_current_tenant
+    get_api("tenants.json/current", {})
+  end
+  #POST /tenants.json/{tenantId}/arrays
+  def post_add_arrays_to_tenant(tenant_id, arrays_load)
+    post_api("tenants.json/#{tenant_id}/arrays", arrays_load)
   end
 end
