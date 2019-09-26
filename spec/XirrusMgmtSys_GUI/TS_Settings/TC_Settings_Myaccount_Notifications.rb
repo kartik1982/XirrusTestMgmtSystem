@@ -6,6 +6,7 @@ require_relative "./local_lib/settings_lib.rb"
 describe "********** TEST CASE: SETTINGS AREA - PROVIDER MANAGEMENT TAB **********" do
 
 	include_examples "go to commandcenter"
+  include_examples "ceanup on environment", Array["Adrian-Automation-Chrome","Adrian-Automation-Chrome-Fourth"], "Dinte"
 	include_examples "create Domain", "Access Points lost connectivity"
 	include_examples "create Domain", "Profile Access Points lost connectivity"
 	include_examples "create Domain", "Station Count"

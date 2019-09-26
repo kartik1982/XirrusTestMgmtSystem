@@ -17,8 +17,8 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
                  count: count, 
                  appControl: true, 
                  easyPass: true, 
-                 parentErpId: "parent.erp1"}         
-    response = @eapi.put_add_tenant(tenant_load)
+                 parentErpId: "api-automation-msp"}         
+    response = @eapi.post_add_tenant(tenant_load)
     expect(response.code).to eq(200)
   end
   it "verify entitlement API for get cusomter using erpid" do    

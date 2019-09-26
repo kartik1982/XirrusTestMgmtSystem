@@ -33,7 +33,7 @@ describe "********** TEST CASE: TROUBLESHOOTING AREA - PORTAL - VOUCHER - ADD AN
   include_examples "navigate to the portal second page", portal_name, false
   include_examples "delete voucher", portal_name
   include_examples "go to the troubleshooting area"
-  include_examples "perform action verify audit trail", "DELETE", Array["EasyPass Portal: "+portal_name], 1
+  include_examples "perform action verify audit trail", "DELETE", Array["Voucher:"], 1
 
   include_examples "delete portal from tile", portal_name
 end

@@ -29,7 +29,7 @@ module API
       put(ent_common_params.update({resource_path: resource_path, load: load}))
     end
     def post_eapi(resource_path, load)   
-      get(ent_common_params.update({resource_path: resource_path, load: load}))
+      post(ent_common_params.update({resource_path: resource_path, load: load}))
     end  
   end
 end
