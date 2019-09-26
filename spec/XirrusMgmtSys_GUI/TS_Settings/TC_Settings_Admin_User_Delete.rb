@@ -5,11 +5,10 @@
 describe "TEST CASE: UI - User Accounts" do 
     email = UTIL.random_email
     password = "pazzword"
-    tenant_id = ""
+    tenant_id = nil
+    user_id = nil
 
     before :all do
-        @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-        @ng = API::ApiClient.new(token: @token)
         user_json = {
             "lastName": "banner_last",
             "phone": "111-222-3333",
@@ -29,25 +28,19 @@ describe "TEST CASE: UI - User Accounts" do
             "forceResetPassword": "false",
             "firstName": "banner_first"
         }
-        
-        # Add user
-        res = @ng.add_user(user_json)
-        user = res.body
-        user_id = user['id']
-        puts "User " + email + " added - " + user_id
 
         # Add tenant
         name_erp = UTIL.random_title
-        res = @ng.post("/tenants.json/", {name: name_erp, erpId: name_erp, products: ["XMS"]})
-        tenant_id = res.body['id']
+        res = @api.post_add_tenant({name: name_erp, erpId: name_erp, products: ["XMS"]})
+        tenant_id = JSON.parse(res.body)['id']
         puts "Tenant " + name_erp + " added - " + tenant_id
 
         # Add tenant user
-        @ng.post("/tenants.json/#{tenant_id}/users", user)
-
+        resp = @api.post_add_user_to_tenant(tenant_id, user_json)
+        user_id = JSON.parse(resp.body)['id']
+        puts "User " + email + " added - " + user_id
         @ui.logout()
         sleep 1
-
         @ui.login(@login_url, email, password)
         sleep 2
     end
@@ -73,7 +66,7 @@ describe "TEST CASE: UI - User Accounts" do
     end
 
     it "Delete Tenant" do 
-        res = @ng.delete_tenant(tenant_id)
-        puts "Tenant deleted - " + tenant_id
+        res = @api.delete_tenant_by_tenantid(tenant_id)
+        expect(JSON.parse(res.body)).to eq("Tenant deleted")
     end
 end

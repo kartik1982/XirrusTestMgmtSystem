@@ -32,7 +32,15 @@ module Tenants
     delete_tenant_by_tenantid(tenant_id)
   end
   #PUT /tenants.json/{tenantId}/users/{userId}
-  def put_update_user_for_tenant(tenant_id, user_id, user_boady)
-    put_api("tenants.json/#{tenant_id}/users/#{user_id}", user_boady)
+  def put_update_user_for_tenant(tenant_id, user_id, user_load)
+    put_api("tenants.json/#{tenant_id}/users/#{user_id}", user_load)
+  end
+  #POST /tenants.json
+  def post_add_tenant(tenant_load)
+    post_api("tenants.json", tenant_load)
+  end
+  #POST /tenants.json/{tenantId}/users
+  def post_add_user_to_tenant(tenant_id, user_load)
+    post_api("tenants.json/#{tenant_id}/users", user_load)
   end
 end

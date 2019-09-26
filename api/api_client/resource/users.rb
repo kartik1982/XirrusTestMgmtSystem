@@ -11,5 +11,8 @@ module Users
   def put_update_user_password_by_userid(user_id, user_password)
     put_api("users.json/backoffice/#{user_id}/password/#{user_password}", {})
   end  
-  
+  #POST /users.json
+  def post_add_user(user_load)
+    post_api("users.json", user_load)
+  end
 end
