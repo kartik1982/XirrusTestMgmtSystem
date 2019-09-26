@@ -3,31 +3,19 @@ require_relative "../local_lib/single_signon_lib.rb"
 #######################################################################################################
 ############TEST CASE: NG - SINGLE SIGN-ON - DELETE ALL ENTRIES########################################
 #######################################################################################################
-
+sso_domains={}
 describe "********** TEST CASE: NG - SINGLE SIGN-ON - DELETE ALL ENTRIES **********" do
-  before :all do
-    @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-    @ng = API::ApiClient.new(token: @token)
-   end
-  it "Find the Single Sign-On domains available in the application" do
-    @@sso_domains = @ng.get_ssodomain_all_tenants.body
-  end
-  it "Find the appropriate IDs" do
-    @@ids_array = []
-    @@sso_domains.each do |sso_entry|
-      @@ids_array.push(sso_entry["id"])
-    end
-  end
   it "Delete the Single Sign-On domains using the appropriate IDs" do
-    @@ids_array.each do |id|
-      @deleted_domain = @ng.delete_ssodomain(id).body
+    sso_domains = JSON.parse(@api.get_all_ssodomains_for_all_tenants.body)
+    sso_domains.each do |domain|
+      response = @api.delete_ssodomain_by_ssodomainid(domain['id'])
       sleep 2
-      expect(@deleted_domain).to eq("\"Sso Domain deleted\"")
+      expect(JSON.parse(response.body)).to eq("Sso Domain deleted")
     end
   end
   it "Verify no domain entries are still available" do
-    @sso_domains = @ng.get_ssodomain_all_tenants.body
-    expect(@sso_domains).to eq([])
+    sso_domains = JSON.parse(@api.get_all_ssodomains_for_all_tenants.body)
+    expect(sso_domains.size).to eq(0)
   end
 end
 
@@ -43,28 +31,16 @@ describe "********** TEST CASE: SETTINGS - SINGLE SIGN-ON - AZURE **********" do
 end
 
 describe "********** TEST CASE: NG - SINGLE SIGN-ON - DELETE ALL ENTRIES **********" do
-  before :all do
-    @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-    @ng = API::ApiClient.new(token: @token)
-   end
-  it "Find the Single Sign-On domain  available in the application" do
-    @@sso_domains = @ng.get_ssodomain_all_tenants.body
-  end
-  it "Find the appropriate IDs" do
-    @@ids_array = []
-    @@sso_domains.each do |sso_entry|
-      @@ids_array.push(sso_entry["id"])
-    end
-  end
-  it "Delete the Single Sign-On domains using the appropriate IDs" do
-    @@ids_array.each do |id|
-      @deleted_domain = @ng.delete_ssodomain(id).body
+ it "Delete the Single Sign-On domains using the appropriate IDs" do
+    sso_domains = JSON.parse(@api.get_all_ssodomains_for_all_tenants.body)
+    sso_domains.each do |domain|
+      response = @api.delete_ssodomain_by_ssodomainid(domain['id'])
       sleep 2
-      expect(@deleted_domain).to eq("\"Sso Domain deleted\"")
+      expect(JSON.parse(response.body)).to eq("Sso Domain deleted")
     end
   end
   it "Verify no domain entries are still available" do
-    @sso_domains = @ng.get_ssodomain_all_tenants.body
-    expect(@sso_domains).to eq([])
+    sso_domains = JSON.parse(@api.get_all_ssodomains_for_all_tenants.body)
+    expect(sso_domains.size).to eq(0)
   end
 end

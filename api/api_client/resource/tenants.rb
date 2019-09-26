@@ -31,4 +31,8 @@ module Tenants
     tenant_id= JSON.parse(get_tenant_by_name(tenant_name).body)['data'][0]['id']
     delete_tenant_by_tenantid(tenant_id)
   end
+  #PUT /tenants.json/{tenantId}/users/{userId}
+  def put_update_user_for_tenant(tenant_id, user_id, user_boady)
+    put_api("tenants.json/#{tenant_id}/users/#{user_id}", user_boady)
+  end
 end

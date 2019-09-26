@@ -6,6 +6,7 @@ require_relative "./resource/groups.rb"
 require_relative "./resource/profiles.rb"
 require_relative "./resource/easypass.rb"
 require_relative "./resource/tenants.rb"
+require_relative "./resource/ssodomain.rb"
 
 module API
     
@@ -16,6 +17,7 @@ module API
     include Profiles
     include Easypass
     include Tenants
+    include Ssodomain
     
     attr_accessor :api_url, :username, :password, :token, :key_secret, :key_secret
     def initialize(args={})

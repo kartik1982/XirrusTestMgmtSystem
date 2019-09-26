@@ -1,19 +1,23 @@
 ############################################################################################################
 #############TEST CASE: User Account - Password expiration by every 90 Days ################################
 ############################################################################################################
+
 describe "*******************TEST CASE: User Account - Password expiration by every 90 Days*************" do
+ user_email = nil
+ user_id = nil
+ tenant_id = nil
+ user_body={}
  before :all do
-   @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-   @ng = API::ApiClient.new(token: @token)
-   resp = @ng.get_user_by_email_for_any_tenant({email: @username})
-   @user_id = resp.body['id']
-   @default_tenant_id = resp.body['defaultTenantId']
-   @get_user_by_email = resp.body
+   user_email = @username
+   resp = @api.get_global_user_by_email(user_email)
+   user_body = JSON.parse(resp.body)
+   user_id = user_body['id']
+   tenant_id = user_body['defaultTenantId']   
  end
  it "update expired date to two days before" do
-   @get_user_by_email['passwordChangedDate']= DateTime.now - 91 #1745702194000
-   @update_user = @ng.update_user_for_tenant(@default_tenant_id, @user_id, @get_user_by_email)
-   expect(@update_user.code).to eq(200)
+   user_body.update({'passwordChangedDate' => DateTime.now - 91})#1745702194000
+   resp = @api.put_update_user_for_tenant(tenant_id, user_id, user_body)
+   expect(resp.code).to eq(200)
  end
  it "verify password expire window message" do
    @ui.logout()
@@ -57,10 +61,10 @@ describe "*******************TEST CASE: User Account - Password expiration by ev
  end
 
   after :all do
-   @ng.update_users_password({userId: "#{@user_id}", password: @password})
-   @get_user_by_email['passwordChangedDate']= "1745702194000"
-   @update_user = @ng.update_user_for_tenant(@default_tenant_id, @user_id, @get_user_by_email)
-   expect(@update_user.code).to eq(200)
+   @api.put_update_user_password_by_userid(user_id, @password)
+   user_body.update({'passwordChangedDate' => "1745702194000"})
+   resp = @api.put_update_user_for_tenant(tenant_id, user_id, user_body)
+   expect(resp.code).to eq(200)
 
  end
 end
