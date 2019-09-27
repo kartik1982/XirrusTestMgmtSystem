@@ -9,7 +9,7 @@ describe "********** TEST CASE: Test the SUPPORT TOOLS area - CUSTOMERS tab - Se
 	include_examples "go to support tools"
 	include_examples "search for customer", tenant_name, "1", true
 	include_examples "cancel search"
-	include_examples "search for customer", tenant_name, tenant_count, false
+	include_examples "search for customer", "Sush-Avaya", tenant_count, false
 	include_examples "cancel search"
 	include_examples "search for customer", "ABCDABCAABBBDACCADDAAAD", "0", false
 end
