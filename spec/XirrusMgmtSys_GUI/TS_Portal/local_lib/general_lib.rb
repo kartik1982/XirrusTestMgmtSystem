@@ -1024,7 +1024,7 @@ shared_examples "update directory synchronization on" do |portal_name, portal_ty
       sleep 1
       expect(@ui.css('.google-directory-help')).not_to be_present
       @ui.click('#guestportal_config_general_google .active .centered .orange')
-      sleep 1
+      sleep 5
       if @browser.window(:url => /accounts.google.com/).exists?
         @browser.window(:url => /accounts.google.com/) do
           if @browser.element(:id => 'submit_approve_access').exists?
