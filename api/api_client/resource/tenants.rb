@@ -43,4 +43,8 @@ module Tenants
   def post_add_user_to_tenant(tenant_id, user_load)
     post_api("tenants.json/#{tenant_id}/users", user_load)
   end
+  #DELETE /tenants.json/{tenantId}/arrays/{arrayId}
+  def delete_array_from_tenant(tenant_id, array_id)
+    delete_api("tenants.json/#{tenant_id}/arrays/#{array_id}")
+  end
 end

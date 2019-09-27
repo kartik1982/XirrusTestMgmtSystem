@@ -2,21 +2,18 @@
 ##################TEST CASE: MY NETWORK area - Test the ACCESS POINTS tab - ACCESS POINT - PUT IN DECOMMISSION##################
 ###################################################################################################################################
 describe "********** TEST CASE: MY NETWORK area - Test the ACCESS POINTS tab - ACCESS POINT - PUT IN DECOMMISSION **********" do
+  tenant_name="mynetwork-accesspointtab-automation-xms-admin"
+  tenant_id= nil
+  array_id=nil
   before :all do
-    @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-    @ng = API::ApiClient.new(token: @token)
-    tenant_name="mynetwork-accesspointtab-automation-xms-admin"
-    @get_tenant_by_name = @ng.tenant_by_name(tenant_name).body
-    puts "Needed tenant ID: #{@get_tenant_by_name.to_s[18..53]}"
-    @needed_tenent_id = @get_tenant_by_name.to_s[18..53]
+    tenant_id = JSON.parse(@api.get_tenant_by_name(tenant_name).body)['data'][0]['id']  
     ## add fake XR2230 to XMSC, used only for UI tests
     @array_mac = UTIL.random_mac
     @array_iap_mac = UTIL.random_mac
     @array_ip = "207.241.148.80"
     @array_serial = UTIL.random_serial
 
-    arrays_to_add = []
-    arrays_to_add << {            
+    arrays_to_add = {            
       baseMacAddress: @array_mac, 
       baseIapMacAddress: @array_iap_mac,   
       serialNumber: @array_serial,
@@ -32,13 +29,9 @@ describe "********** TEST CASE: MY NETWORK area - Test the ACCESS POINTS tab - A
       onlineStatus: "DOWN",    
       country: "US"
     }
-    @create_fake_array_res = @ng.add_arrays_to_tenant(@needed_tenent_id, arrays_to_add) 
-    expect([200,201]).to include(@create_fake_array_res.code)
-
-    @fake_array = @create_fake_array_res.body[0]
-
-    @fake_array_id = @create_fake_array_res.body[0]['id']
-
+    response = @api.post_add_arrays_to_tenant(tenant_id, [arrays_to_add]) 
+    expect([200,201]).to include(response.code)
+    array_id = JSON.parse(response.body).first['id']
     @browser.refresh
     sleep 8
   end
@@ -93,11 +86,8 @@ describe "********** TEST CASE: MY NETWORK area - Test the ACCESS POINTS tab - A
     end
 
   after :all do 
-    array_res = @ng.global_by_serial(@array_serial)
-    id = array_res.body["xirrusArrayDto"]["id"]
-    del_res = @ng.delete_array_global({arrayId: id})
-    puts del_res
-    expect(del_res.code).to eql(200)
-    expect(del_res.body).to eql("\"Array deleted\"")    
+    response = @api.delete_array_from_tenant(tenant_id, array_id)    
+    expect(response.code).to eql(200)
+    expect(JSON.parse(response.body)).to eql("Array deleted")    
   end
 end
