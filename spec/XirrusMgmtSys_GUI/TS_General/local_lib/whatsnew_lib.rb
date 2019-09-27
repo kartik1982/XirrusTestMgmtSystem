@@ -7,9 +7,9 @@ shared_examples "Test what's new" do
       sleep 1
       @ui.click('#header_news_link')
       sleep 1
-      @browser.window(:url => /riverbed.com/).wait_until_present
-      @browser.window(:url => /riverbed.com/).use do
-        expect(@browser.url).to eq("https://www.riverbed.com/products/xirrus/index.html")
+      @browser.window(:url => /https:\/\/www.riverbed.com\//).wait_until_present
+      @browser.window(:url => /https:\/\/www.riverbed.com\//).use do
+        expect(@browser.url).to eq("https://www.riverbed.com/products/xirrus/xirrus-management-system-cloud.html")
       end
     end
   end
