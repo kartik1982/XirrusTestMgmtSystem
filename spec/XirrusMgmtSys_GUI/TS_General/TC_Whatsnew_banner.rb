@@ -5,10 +5,7 @@ describe "TEST CASE: What's new banner behavior" do
   new_user_email = "banner_test@testing.com"
   new_user_password = "pazzword"
   new_user_id = ""
-  before :all do
-    @token = API.get_backoffice_token({username: @username, password: @password, host: @xms_url})
-    @ng = API::ApiClient.new(token: @token)
-  end
+
   user_json = {
        "lastName": "banner_last",
        "phone": "111-222-3333",
@@ -17,9 +14,9 @@ describe "TEST CASE: What's new banner behavior" do
        "showWelcome": "false",
        "password": {
            "isSet": "true",
-           "value": "pazzword"
+           "value": new_user_password
        },
-       "email": "banner_test@testing.com",
+       "email": new_user_email,
        "acceptedEula": "true",
        "description": "string",
        "roles": [
@@ -28,10 +25,19 @@ describe "TEST CASE: What's new banner behavior" do
        "forceResetPassword": "false",
        "firstName": "banner_first"
    }
+   before :all do
+     news_load = {
+        url: "https://www.riverbed.com/products/xirrus/xirrus-management-system-cloud.html",
+        message: "Automation Test Message for Waht's New",
+        brand: "XIRRUS"
+      }
+     @api.post_set_whats_new_url_and_message(news_load)
+   end
   
     it "created user with given password" do
-        resp = @ng.add_user(user_json)
-        new_user_id = resp.body['id']
+        resp = @api.post_add_user(user_json)
+        new_user_id = JSON.parse(resp.body)['id']
+        expect(JSON.parse(resp.body)['email']).to eq(new_user_email)
     end
 
     it "logged out, logged new user in" do
@@ -46,7 +52,7 @@ describe "TEST CASE: What's new banner behavior" do
     end
     
     it "reset news for all users, logged out, logged in" do
-        @ng.reset_whats_new_for_all_users()
+        @api.get_reset_news_all_users()
         sleep 1
         @ui.logout()
         @ui.login_without_url(new_user_email, new_user_password)
@@ -58,6 +64,7 @@ describe "TEST CASE: What's new banner behavior" do
     end
 
     it "deleted newly created user" do
-        @ng.delete_user(userId: new_user_id)
+        resp = @api.delete_user_using_userid(new_user_id)
+        expect(resp.code).to eq(200)
     end
 end

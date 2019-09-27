@@ -15,4 +15,12 @@ module Users
   def post_add_user(user_load)
     post_api("users.json", user_load)
   end
+  #GET /users.json/backoffice/news/reset
+  def get_reset_news_all_users
+    get_api("users.json/backoffice/news/reset", {})
+  end
+  #DELETE /users.json/{userId}
+  def delete_user_using_userid(user_id)
+    delete_api("users.json/#{user_id}")
+  end
 end
