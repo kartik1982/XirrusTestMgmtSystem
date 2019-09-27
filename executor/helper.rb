@@ -10,6 +10,7 @@ require 'optparse'
 require 'headless'
 require 'time_diff'
 require 'pp'
+require 'csv'
 
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"
