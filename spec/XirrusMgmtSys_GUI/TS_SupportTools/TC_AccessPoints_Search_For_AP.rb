@@ -5,8 +5,8 @@ require_relative "./local_lib/support_tools_lib.rb"
 ################################################################################################################
 describe "********** TEST CASE: Test the SUPPORT TOOLS area - ACCESS POINTS tab - Search for an AP **********" do
 
-	ap_sn = return_proper_value_based_on_the_used_environment($the_environment_used, "supportTools/access_points/search_for_ap.rb", "AP SN")
-	tenant_id = return_proper_value_based_on_the_used_environment($the_environment_used, "supportTools/access_points/search_for_ap.rb", "Tenant ID")
+	$the_environment_used=="test01"? ap_sn = "A1600480E39B3" : ap_sn = "AUTOWAP9144AVAYA003FIRST"
+	$the_environment_used=="test01"? tenant_id = "1847f571-e02d-11e9-ab26-02429829a388" : tenant_id = "7d133c71-228b-11e6-9973-06f40aa1df45"
 
 	include_examples "go to support tools"
 	include_examples "go to tab", "Access Points"
