@@ -16,5 +16,5 @@ gem 'watir'
 gem 'rest-client'
 gem 'httparty'
 gem "time_diff"
-# gem 'gmail', '~> 0.6.0'
-gem 'gmail', git: 'git://github.com/gmailgem/gmail.git', branch: 'master'
+gem 'gmail', '~> 0.6.0'
+
