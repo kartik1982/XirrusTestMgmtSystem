@@ -23,4 +23,8 @@ module Users
   def delete_user_using_userid(user_id)
     delete_api("users.json/#{user_id}")
   end
+  #PUT /users.json/{userId}
+  def put_update_user(user_id, user_load)
+    put_api("users.json/#{user_id}", user_load)
+  end
 end
