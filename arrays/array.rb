@@ -231,9 +231,4 @@ module Arrays
       end
 
   end # Array
-
-
-
-
-
 end # EXECUTOR

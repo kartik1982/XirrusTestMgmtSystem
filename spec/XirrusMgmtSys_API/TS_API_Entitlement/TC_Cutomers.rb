@@ -32,6 +32,7 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     tenant= JSON.parse(response.body)
     expect(tenant['erpId']).to eq(erp_id)
     expect(tenant['name']).to eq(tenant_name)
+    expect(tenant['appControl']).to eq(false)
     expect(tenant['maxCount']).to eq(count)    
   end
   it "verify entitlement API to add order tenant with erpid" do    
@@ -39,10 +40,15 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     response = @eapi.post_add_tenant(tenant_load)
     expect(response.code).to eq(200)
   end
-  it "verify entitlement API to renew existing customer Entitlement" do       
-    response = @eapi.put_renew_tenant(tenant_load)
+  it "verify entitlement API to renew existing customer Entitlement" do 
+    response = @eapi.post_renew_tenant(tenant_load.except(:name, :contactEmail, :parentErpId))
     expect(response.code).to eq(200)
     expect(JSON.parser(response.body)['expirationDate']).not_to eq(expirationDate)
+  end  
+  it "verify entitlement API for Upgrade customer using erpid" do
+    tenant_load.update({appControl: true})
+    response = @eapi.put_upgrade_tenant(tenant_load.except(:name, :contactEmail, :parentErpId, :product, :term, :count))
+    expect(response.code).to eq(200)
   end
   it "verify entitlement API for get customer using email address" do
     response = @eapi.get_tenant_by_email(email_address)
@@ -50,11 +56,8 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     tenant= JSON.parse(response.body).first
     expect(tenant['erpId']).to eq(erp_id)
     expect(tenant['name']).to eq(tenant_name)
+    expect(tenant['appControl']).to eq(true)
     expect(tenant['maxCount']).to eq(50)
-  end  
-  it "verify entitlement API for Upgrade customer using erpid" do
-    response = @eapi.post_upgrade_tenant(tenant_load.update({appControl: true}))
-    expect(response.code).to eq(200)
   end
   it "verify that user received email for new account creation" do
     gm = API::GmailApi.new(args={})

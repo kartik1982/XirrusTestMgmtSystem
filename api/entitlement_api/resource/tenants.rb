@@ -8,10 +8,10 @@ module Tenants
   def post_add_tenant(load)
     post_eapi("entitlements/customer.json/add", load)
   end
-  def put_renew_tenant(load)
-    put_eapi("entitlements/customer.json/renew", load)
+  def post_renew_tenant(load)
+    post_eapi("entitlements/customer.json/renew", load)
   end
-    def post_upgrade_tenant(load)
-    post_eapi("entitlements/customer.json/upgrade", load)
+    def put_upgrade_tenant(load)
+    put_eapi("entitlements/customer.json/upgrade", load)
   end
 end
