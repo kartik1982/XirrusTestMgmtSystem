@@ -1,14 +1,19 @@
 require 'rest-client'
 require 'json'
+require_relative 'resource/accounts.rb'
+require_relative 'resource/arrays.rb'
 
 module API
-  class SalesforceApi
-    attr_accessor :token
+  class SfdcApi
+    include Arrays
+    include Accounts
+    
+    attr_accessor :token, :username, :password
     REFRESH_TOKEN = "5Aep861yCOjWzSFTnNd5rdzQINclGUbtu25TGFpaSwOBsh9uJplQ.FWQ0mzqgIY7d3Enhqp4ZLbAeNZbFtUmwGQ"
     HOST = 'https://cs13.salesforce.com/services/' #apexrest/
     def initialize(args ={})
-      @username = args[:username]
-      @password = args[:password]
+      @username = args[:username] || "armen.zakaryan@xirrus.com"
+      @password = args[:password] || "Victory151Y0ZaIGWal6eQfx3vhms6k1sv"
       @token = refresh_token
     end
 
@@ -68,7 +73,7 @@ module API
     def delete(endpoint, params)
       path = "#{HOST}#{endpoint}"
       unless params.empty?
-      path += "?#{XMS.build_query(params)}"
+      path += "?#{build_query(params)}"
       end
       res = ""
       begin
@@ -82,7 +87,19 @@ module API
       end
       res
     end
-
+    def build_query(params = {})
+      res = ""
+      params.each { |key,val|
+        if val.kind_of?(Array)
+          val.each {|v|
+            res << "#{key}=#{v}&"
+          }
+        else
+          res << "#{key}=#{val}&"
+        end
+      }
+      res
+      end
    private
 
    def refresh_token
@@ -92,8 +109,8 @@ module API
          grant_type: "password",
          client_id: "3MVG982oBBDdwyHiUabiYHRbjd22aIQLUaX6gYOjgctgatwmo_L4F9UsxWmXVqBaJU6.5kYDeMIezwlGnKjHv",
          client_secret: "1614004529141118473",
-         username: "armen.zakaryan@xirrus.com",
-         password: "Victory151Y0ZaIGWal6eQfx3vhms6k1sv"
+         username: @username,
+         password: @password
        }, :accept => :json )
        token = JSON.parse(res.body)["access_token"]
      rescue => e 
@@ -102,6 +119,5 @@ module API
      end
      token
    end
-
-  end # SalesforceApiClient
+  end # SfdcApi
 end # API
