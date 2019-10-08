@@ -9,6 +9,7 @@ require_relative "./resource/tenants.rb"
 require_relative "./resource/ssodomain.rb"
 require_relative "./resource/globalsettings.rb"
 require_relative "./resource/sfdc.rb"
+require_relative "./resource/provision.rb"
 
 module API
     
@@ -22,6 +23,7 @@ module API
     include Ssodomain
     include Globalsettings
     include Sfdc
+    include Provision
     
     attr_accessor :api_url, :username, :password, :token, :key_secret, :key_secret
     def initialize(args={})

@@ -17,8 +17,13 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
                  parentErpId: nil}
   before :all do
     @eapi = entitlement_api
+    if @api.get_tenant_by_name(tenant_name).code == 200
+      @api.put_scope_to_tenant_by_tenant_name("api-automation-msp")
+      @api.delete_tenant_by_name(tenant_name)
+    end    
   end
   after :all do
+    @api.put_scope_to_tenant_by_tenant_name("api-automation-msp")
     @api.delete_tenant_by_name(tenant_name)
   end
   it "verify entitlement API to add tenant with erpid" do            
@@ -39,25 +44,6 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     tenant_load.update({count: 30})       
     response = @eapi.post_add_tenant(tenant_load)
     expect(response.code).to eq(200)
-  end
-  it "verify entitlement API to renew existing customer Entitlement" do 
-    response = @eapi.post_renew_tenant(tenant_load.except(:name, :contactEmail, :parentErpId))
-    expect(response.code).to eq(200)
-    expect(JSON.parser(response.body)['expirationDate']).not_to eq(expirationDate)
-  end  
-  it "verify entitlement API for Upgrade customer using erpid" do
-    tenant_load.update({appControl: true})
-    response = @eapi.put_upgrade_tenant(tenant_load.except(:name, :contactEmail, :parentErpId, :product, :term, :count))
-    expect(response.code).to eq(200)
-  end
-  it "verify entitlement API for get customer using email address" do
-    response = @eapi.get_tenant_by_email(email_address)
-    expect(response.code).to eq(200)
-    tenant= JSON.parse(response.body).first
-    expect(tenant['erpId']).to eq(erp_id)
-    expect(tenant['name']).to eq(tenant_name)
-    expect(tenant['appControl']).to eq(true)
-    expect(tenant['maxCount']).to eq(50)
   end
   it "verify that user received email for new account creation" do
     gm = API::GmailApi.new(args={})
@@ -84,10 +70,43 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     @browser.element(name: "j_newpassword").send_keys @password
     @browser.element(name: "j_newpassword_confirm").send_keys @password
     @ui.css(".button.submitBtn").click
+    sleep 2
     if @ui.toast_dialog.present?
       @ui.toast_dialog_ok_button.click
       @ui.toast_dialog.wait_while_present
     end
     expect(@ui.css("div.header .title").text).to eq("Welcome")
+    @ui.css(".guidedTour").click
+    @ui.css("#tour_exit").click
+    sleep 1
+    @ui.css("#_jq_dlg_btn_1").click
+    sleep 1
+    @ui.css("#header_mynetwork_link").click
   end
+  it "Provision Access Point to tenant and activate Access Point" do
+    @fog = VMD::FogSession.new({env: @env})
+    @fog.add_Provision_array_by_serial_with_erpid(erp_id, "NAUTO0000000001")
+    sleep 2
+    @fog.activate_array_by_serial("NAUTO0000000001")
+    sleep 2
+  end
+  it "verify entitlement API to renew existing customer Entitlement" do 
+    response = @eapi.post_renew_tenant(tenant_load.except(:name, :contactEmail, :parentErpId))
+    expect(response.code).to eq(200)
+    expect(JSON.parse(response.body)['expirationDate']).not_to eq(expirationDate)
+  end  
+  it "verify entitlement API for Upgrade customer using erpid" do
+    tenant_load.update({appControl: true})
+    response = @eapi.put_upgrade_tenant(tenant_load.except(:name, :contactEmail, :parentErpId, :product, :term, :count))
+    expect(response.code).to eq(200)
+  end
+  it "verify entitlement API for get customer using email address" do
+    response = @eapi.get_tenant_by_email(email_address)
+    expect(response.code).to eq(200)
+    tenant= JSON.parse(response.body).first
+    expect(tenant['erpId']).to eq(erp_id)
+    expect(tenant['name']).to eq(tenant_name)
+    expect(tenant['appControl']).to eq(true)
+    expect(tenant['maxCount']).to eq(50)
+  end  
 end

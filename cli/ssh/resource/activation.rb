@@ -31,12 +31,13 @@ module Activation
   end
 
   def start_activation()
-    cmd(["activation interval 1", "cloud on", "activation start", "save", "quit"])
+    @device_type.downcase == "aos" ? commands= ["configure", "management","activation interval 1", "activation enable", "save", "quit"] : commands= ["activation interval 1", "cloud on", "activation start", "save", "quit"]
+    cmd(commands)
   end
 
   def set_activation_url(env, times=1, url=nil)
-    url = url || ACTIVATION_URL.gsub("env", env)
-    actions = []
+    url = url || "https://activate-#{env}.cloud.xirrus.com"
+    @device_type.downcase == "aos" ? actions = ["configure", "management"] : actions = []
     times.times{ actions << "activation server #{url}" }
     actions << "save" << "quit"
     cmd(actions)

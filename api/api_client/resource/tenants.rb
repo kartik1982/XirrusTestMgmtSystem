@@ -47,4 +47,17 @@ module Tenants
   def delete_array_from_tenant(tenant_id, array_id)
     delete_api("tenants.json/#{tenant_id}/arrays/#{array_id}")
   end
+  #PUT /tenants.json/scope/{tenantId}
+  def put_scope_to_tenant_by_tenantid(tenant_id)
+    put_api("tenants.json/scope/#{tenant_id}",{})
+  end
+  #PUT /tenants.json/scope/clear
+  def put_reset_scope_tenant_default
+    put_api("tenants.json/scope/clear",{})
+  end
+ #Custome
+  def put_scope_to_tenant_by_tenant_name(tenant_name)
+    tenant_id= JSON.parse(get_tenant_by_name(tenant_name).body)['data'][0]['id']
+    put_scope_to_tenant_by_tenantid(tenant_id)
+  end
 end

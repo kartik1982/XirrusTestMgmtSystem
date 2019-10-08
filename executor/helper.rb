@@ -11,12 +11,15 @@ require 'headless'
 require 'time_diff'
 require 'pp'
 require 'csv'
+require 'active_support/time'
 
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"
 require_relative "../api/gmail_api/gmail_api.rb"
 require_relative "../gui/ui.rb"
 require_relative "../arrays/array.rb"
+require_relative "../cli/ssh/ssh_session.rb"
+require_relative "../vmd/fog/fog_session.rb"
 
 pn = Pathname.new("xirrus-auto")
 if pn.exist?
