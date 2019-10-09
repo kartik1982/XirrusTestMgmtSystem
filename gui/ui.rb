@@ -724,7 +724,16 @@ def goto_mynetwork
         sleep 1
       end
     end
-
+    def close_all_toast_windows
+      sleep 2
+      win_count = @browser.elements(css: ".toast.toast-warning").length
+      win_count.times do
+        if toast_dialog.present?
+           toast_dialog_ok_button.click
+           sleep 0.5
+        end
+      end    
+    end
     def error_dialog
       get(:div, { css: ".error" })
     end

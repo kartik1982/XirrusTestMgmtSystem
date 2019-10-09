@@ -3,16 +3,20 @@ module Arrays
     command = "addArray -n #{count} --arrayModel XR620 --expirationDate #{expiration} --env #{@env} --username #{@username} --password #{@password}"
     execute(command)
   end
-  def add_array_into_tenant(tenant_id, array_sn)
+  def add_array_into_tenant_with_tenantid(tenant_id, array_sn)
     # execute("setTenantScope --tenantId #{tenant_id} --env #{@env}")
     execute("addArray --tenantId #{tenant_id} --serialNumber #{array_sn} --arrayModel XR620 --env #{@env}") #--expirationDate 1541870296000 --location Moon --licensedAosVersion 8.5
   end
+  def add_array_with_serial_expiration(ap_sn, expiration=1541870296000)
+    command = "addArray --serialNumber #{ap_sn} --arrayModel XR620 --expirationDate #{expiration} --env #{@env} --username #{@username} --password #{@password}"
+    execute(command)
+  end
 
-  def add_array_into_tenant_to_current_tenant(array_sn)
+  def add_array_into_current_tenant(array_sn)
     execute("addArray --serialNumber #{array_sn} --arrayModel XR620 --env #{@env} --username #{@username} --password #{@password}") #--expirationDate 1541870296000 --location Moon --licensedAosVersion 8.5
   end
 
-  def delete_array_from_tenant_from_current_tenant(ap_sn)
+  def delete_array_from_current_tenant(ap_sn)
     stop_all_process_running_for_ap_serial(ap_sn)
     execute("deleteArray --serialNumber #{ap_sn} --env #{@env} --username #{@username} --password #{@password}")
   end

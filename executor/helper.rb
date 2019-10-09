@@ -15,6 +15,7 @@ require 'active_support/time'
 
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"
+require_relative "../api/entitlement_api/entitlement_api.rb"
 require_relative "../api/gmail_api/gmail_api.rb"
 require_relative "../gui/ui.rb"
 require_relative "../arrays/array.rb"
@@ -60,3 +61,81 @@ def move_log_file_to_remote_server(server_addr, local_path, remote_path, testcas
       puts "something wrong with file transfer"
     end
   end
+  
+def get_entitlement_api_args
+  env = @env
+  case env
+  when "production"
+  args={
+        username: @username,
+        password:@password,
+        host: @login_url,
+        ent_url: "https://test03-api-94151060.cloud.xirrus.com",
+        ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
+  }
+  when "preview"
+    # $VERBOSE = nil
+    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+    args={
+        username: @username,
+        password:@password,
+        host: @login_url,
+        ent_url: "https://test03-api-94151060.cloud.xirrus.com",
+        ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
+    }
+  when "test03"
+    args={
+        username: @username,
+        password:@password,
+        host: @login_url,
+        ent_url: "https://test03-api-94151060.cloud.xirrus.com",
+        ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
+    }
+  when "test01"
+    args={
+        username: @username,
+        password:@password,
+        host: @login_url,
+        ent_url: "https://test01-api-311195077.cloud.xirrus.com",
+        ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
+    }
+    args
+ end
+end
+
+def entitlement_api
+  API::EntitlementApi.new(get_entitlement_api_args)
+end
+
+def get_tenant_load
+  args= { name: "suspicious-entitlement-update-automation-xms-admin",
+                  erpId: "suspicious-entitlement-update-automation-xms-admin",
+                  tenantProperties: {
+                    apCountLimit: 4,
+                    easypassPortalExpiration: Time.now + 12.months*1000,
+                    allowEasypass: true,
+                    allowAosAppcon: true},
+                    expirationDate: Time.now + 12.months*1000,
+                  products: ["XMS"]}
+end
+
+def get_user_load
+  args= { lastName: "Dinte",
+         phone: "111-222-3333",
+         tenantUsers: [ ],
+         status: "ACTIVE",
+         showWelcome: false,
+         password: {
+             isSet: true,
+             value: "Qwerty1@"
+         },
+       email: "suspicious+entitlement+update+automation+xms+admin@xirrus.com",
+       acceptedEula: true,
+       description: "Description",
+       roles: [
+            "ROLE_BACKOFFICE_SUPER_ADMIN",
+            "ROLE_XMS_ADMIN"
+       ],
+       forceResetPassword: false,
+       firstName: "suspicious-entitlement-update-automation-xms-admin"}
+end

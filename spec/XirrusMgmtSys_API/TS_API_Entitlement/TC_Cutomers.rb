@@ -6,33 +6,29 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
   expirationDate=nil
   count= 20
   tenant_load={erpId: erp_id,
-                 transactionId: "1234567890",
+                 transactionId: "kar#{Time.now.to_i}",
                  name: tenant_name, 
                  contactEmail: [ email_address, "entitlement.user02@contact.com" ],  
                  product: "XMS", 
-                 term: 14, 
+                 term: 12, 
                  count: count, 
                  appControl: false, 
                  easyPass: true, 
                  parentErpId: nil}
   before :all do
-    @eapi = entitlement_api
-    if @api.get_tenant_by_name(tenant_name).code == 200
-      @api.put_scope_to_tenant_by_tenant_name("api-automation-msp")
-      @api.delete_tenant_by_name(tenant_name)
-    end    
+    @eapi = entitlement_api  
+    @fog = VMD::FogSession.new({env: @env})  
   end
   after :all do
-    @api.put_scope_to_tenant_by_tenant_name("api-automation-msp")
     @api.delete_tenant_by_name(tenant_name)
   end
   it "verify entitlement API to add tenant with erpid" do            
-    response = @eapi.post_add_tenant(tenant_load)
+    response = @eapi.post_eapi_add_tenant(tenant_load)
     expect(response.code).to eq(200)
     expirationDate = JSON.parse(response.body)['expirationDate']
   end
   it "verify entitlement API for get cusomter using erpid" do    
-    response = @eapi.get_tenant_by_erpid(erp_id)
+    response = @eapi.get_eapi_tenant_by_erpid(erp_id)
     expect(response.code).to eq(200)
     tenant= JSON.parse(response.body)
     expect(tenant['erpId']).to eq(erp_id)
@@ -41,9 +37,10 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     expect(tenant['maxCount']).to eq(count)    
   end
   it "verify entitlement API to add order tenant with erpid" do    
-    tenant_load.update({count: 30})       
-    response = @eapi.post_add_tenant(tenant_load)
+    tenant_load.update({count: 30, transactionId: "kar#{Time.now.to_i}"})       
+    response = @eapi.post_eapi_add_tenant(tenant_load)
     expect(response.code).to eq(200)
+    expect(JSON.parse(response.body)["expirationDate"]).to eq(expirationDate)
   end
   it "verify that user received email for new account creation" do
     gm = API::GmailApi.new(args={})
@@ -70,11 +67,7 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     @browser.element(name: "j_newpassword").send_keys @password
     @browser.element(name: "j_newpassword_confirm").send_keys @password
     @ui.css(".button.submitBtn").click
-    sleep 2
-    if @ui.toast_dialog.present?
-      @ui.toast_dialog_ok_button.click
-      @ui.toast_dialog.wait_while_present
-    end
+    @ui.close_all_toast_windows
     expect(@ui.css("div.header .title").text).to eq("Welcome")
     @ui.css(".guidedTour").click
     @ui.css("#tour_exit").click
@@ -83,25 +76,25 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
     sleep 1
     @ui.css("#header_mynetwork_link").click
   end
-  it "Provision Access Point to tenant and activate Access Point" do
-    @fog = VMD::FogSession.new({env: @env})
+  it "Provision Access Point to tenant and activate Access Point" do    
     @fog.add_Provision_array_by_serial_with_erpid(erp_id, "NAUTO0000000001")
-    sleep 2
-    @fog.activate_array_by_serial("NAUTO0000000001")
     sleep 2
   end
   it "verify entitlement API to renew existing customer Entitlement" do 
-    response = @eapi.post_renew_tenant(tenant_load.except(:name, :contactEmail, :parentErpId))
+    tenant_load.update({transactionId: "kar#{Time.now.to_i}"})
+    response = @eapi.post_eapi_renew_tenant(tenant_load.except(:name, :contactEmail, :parentErpId))
     expect(response.code).to eq(200)
-    expect(JSON.parse(response.body)['expirationDate']).not_to eq(expirationDate)
+    old_expiration = DateTime.strptime(((expirationDate * 0.001) + 12.months).to_s, '%s').strftime("%m-%d-%y")
+    new_expiration = DateTime.strptime((JSON.parse(response.body)['expirationDate'] * 0.001).to_s, '%s').strftime("%m-%d-%y")
+    expect(old_expiration).to eq(new_expiration)
   end  
   it "verify entitlement API for Upgrade customer using erpid" do
-    tenant_load.update({appControl: true})
-    response = @eapi.put_upgrade_tenant(tenant_load.except(:name, :contactEmail, :parentErpId, :product, :term, :count))
+    tenant_load.update({appControl: true, transactionId: "kar#{Time.now.to_i}"})
+    response = @eapi.put_eapi_upgrade_tenant(tenant_load.except(:name, :contactEmail, :parentErpId, :product, :term, :count))
     expect(response.code).to eq(200)
   end
   it "verify entitlement API for get customer using email address" do
-    response = @eapi.get_tenant_by_email(email_address)
+    response = @eapi.get_eapi_tenant_by_email(email_address)
     expect(response.code).to eq(200)
     tenant= JSON.parse(response.body).first
     expect(tenant['erpId']).to eq(erp_id)
