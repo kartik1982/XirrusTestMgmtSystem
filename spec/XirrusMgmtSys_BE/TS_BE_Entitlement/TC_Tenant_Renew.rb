@@ -28,13 +28,6 @@ describe "********** TEST CASE: VERIFY TENANT WILL EXPIRE AND EXPIRED MESSAGE **
       @fog.add_array_with_serial_expiration(ap_sn, time.to_i*1000)
     end
   end
-  it "logout and login as testuser" do
-    @ui.logout
-    @ui.login(@login_url, user_email, @password)
-    @ui.close_all_toast_windows
-    sleep 1
-    @ui.css("#header_mynetwork_link").click
-  end
   it "renew all access points in tenant for 12 months using entilement api" do
       response = @eapi.post_eapi_renew_tenant(tenant_load={erpId: tenant_name,
                  transactionId: "kar#{Time.now.to_i}",
@@ -51,7 +44,4 @@ describe "********** TEST CASE: VERIFY TENANT WILL EXPIRE AND EXPIRED MESSAGE **
         expect(array["expirationDate"]).to eq((time + 12.months).to_i * 1000)
       end 
   end
- it "logout testuser" do
-   @ui.logout
- end
 end
