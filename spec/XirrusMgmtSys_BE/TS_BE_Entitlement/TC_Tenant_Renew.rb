@@ -6,8 +6,10 @@ describe "********** TEST CASE: VERIFY TENANT WILL EXPIRE AND EXPIRED MESSAGE **
   tenant_name = "tenant-renew-automation-xms-admin"
   user_email = tenant_name.gsub("-", "+")+"@xirrus.com"
   time = Time.now + 10.days
-  tenant_load = get_tenant_load.update({name: tenant_name, erpId: tenant_name, expirationDate: time.to_i*1000, 
-                                        tenantProperties: {easypassPortalExpiration: time.to_i*1000, apCountLimit: 4, 
+  old_expirationDate = time.to_i*1000
+  new_expirationDate = (time + 12.months).to_i * 1000
+  tenant_load = get_tenant_load.update({name: tenant_name, erpId: tenant_name, expirationDate: old_expirationDate, 
+                                        tenantProperties: {easypassPortalExpiration: old_expirationDate, apCountLimit: 4, 
                                         allowEasypass: true, allowAosAppcon: true}})
   user_load = get_user_load.update({email: user_email, firstName: tenant_name})
   tenant_id = nil
@@ -37,11 +39,12 @@ describe "********** TEST CASE: VERIFY TENANT WILL EXPIRE AND EXPIRED MESSAGE **
                  appControl: true, 
                  easyPass: true})
        expect(response.code).to eq(200)
+       expect(JSON.parse(response.body)['expirationDate']).to eq(new_expirationDate)
   end
   it "verify all access points in tenant renewed for 12 months" do
       arrays.each do|ap_sn|
         array = JSON.parse(@api.get_global_by_serial(ap_sn).body)["xirrusArrayDto"]
-        expect(array["expirationDate"]).to eq((time + 12.months).to_i * 1000)
+        expect(array["expirationDate"]).to eq(new_expirationDate)
       end 
   end
 end
