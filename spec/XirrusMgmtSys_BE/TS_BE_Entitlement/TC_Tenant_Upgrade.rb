@@ -80,13 +80,13 @@ describe "********** TEST CASE: VERIFY TENANT WILL EXPIRE AND EXPIRED MESSAGE **
                easyPass: false})
      expect(response.code).to eq(200)
   end
-  it "verify tenant application control remain ON and Easypass OFF using Entitlement API" do    
+  it "verify tenant application control remain ON and Easypass ON using Entitlement API" do    
     response = @eapi.get_eapi_tenant_by_erpid(tenant_name)
     expect(response.code).to eq(200)
     tenant= JSON.parse(response.body)    
     expect(tenant['name']).to eq(tenant_name)
     expect(tenant['appControl']).to eq(true)
-    expect(tenant['easyPass']).to eq(false)
+    expect(tenant['easyPass']).to eq(true)
     expect(tenant['maxCount']).to eq(2)    
     expect(tenant['expirationDate']).to eq(expirationDate)
   end

@@ -65,6 +65,7 @@ describe "********** TEST CASE: VERIFY SUSPICIOUS ENTITLEMENT UPDATE ACTIVITY **
     expect(email_content.css("p")[7].text).to include(DateTime.strptime((new_expiration * 0.001).to_s, '%s').strftime("%y-%m-%d"))
   end
   it "verify suspicious entitlement server log for longer duration" do
+    sleep 10
     log = @logstash.search(["suspicious", "warn", transaction_id], 10)[0]
     log_contain=log["_source"]["message"]
     expect(log_contain[1]).to include("New expiration is >50% of term and <75% of slots are used")
@@ -120,6 +121,7 @@ describe "********** TEST CASE: VERIFY SUSPICIOUS ENTITLEMENT UPDATE ACTIVITY **
     expect(email_content.css("p")[7].text).to include(DateTime.strptime((new_expiration * 0.001).to_s, '%s').strftime("%y-%m-%d"))    
   end
   it "verify suspicious entitlement server log for shorter duration" do
+    sleep 10
     log = @logstash.search(["suspicious", "warn", transaction_id], 10)[0]
     log_contain=log["_source"]["message"]
     expect(log_contain[1]).to include("New term terminates >12 months before the current Tenant expiration")
