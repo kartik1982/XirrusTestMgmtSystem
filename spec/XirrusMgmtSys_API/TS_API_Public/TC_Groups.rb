@@ -6,7 +6,7 @@ describe "*******TESTCASE: PUBLIC API FOR DOMAINS ************" do
   before :all do    
      @papi= public_api
      group_load = { name: group_name, description: "Description for "+group_name}
-     @api.post_group(group_load)
+     @api.post_add_group(group_load)
      sleep 2
      groups = JSON.parse(@api.get_groups.body)['data']
      groups.each do |item|
