@@ -6,15 +6,15 @@ describe "*********TESTCASE: ENTITLEMENT API FOR CUSTOMER***********" do
   expirationDate=nil
   count= 20
   tenant_load={erpId: erp_id,
-                 transactionId: "kar#{Time.now.to_i}",
-                 name: tenant_name, 
-                 contactEmail: [ email_address, "entitlement.user02@contact.com" ],  
-                 product: "XMS", 
-                 term: 12, 
-                 count: count, 
-                 appControl: false, 
-                 easyPass: true, 
-                 parentErpId: nil}
+               transactionId: "kar#{Time.now.to_i}",
+               name: tenant_name, 
+               contactEmail: [ email_address, "entitlement.user02@contact.com" ],  
+               product: "XMS", 
+               term: 12, 
+               count: count, 
+               appControl: false, 
+               easyPass: true, 
+               parentErpId: nil}
   before :all do
     @eapi = entitlement_api  
     @fog = VMD::FogSession.new({env: @env})  

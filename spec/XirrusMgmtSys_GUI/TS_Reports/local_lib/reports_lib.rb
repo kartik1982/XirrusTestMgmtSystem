@@ -1087,8 +1087,8 @@ def verify_report_email_features(report_name, what_email)
       # body = @ui_new.css(".nH .Bs td:first-child table[class*='frame']") 
       body = @ui_new.css(".nH .Bs td:first-child")
       expect(body.element(:css => "a[href = 'https://support.cambiumnetworks.com']")).to be_present
-      expect(body.element(:css => "img[alt = 'Riverbed Support']")).to be_present
-      expect(body.element(:css => "img[alt = 'Riverbed Support']").attribute_value("src")).to eq('https://ci3.googleusercontent.com/proxy/VZxKTX_hqJbVmbe9ASaZT_GwtriANTWKFSeUNquo1NQDGBhoowXF8VWEQ5oIOzyyJ48cc3KqAB9Mfg8ZwKq4VwFsD4vC83n3u9V1Xud_4X0SkSgfQxY=s0-d-e1-ft#https://support.riverbed.com/content/dam/images/rb-support-logo.png')
+      expect(body.element(:css => "img[alt = 'Cambium Networks Support']")).to be_present
+      expect(body.element(:css => "img[alt = 'Cambium Networks Support']").attribute_value("src")).to eq('https://ci3.googleusercontent.com/proxy/VZxKTX_hqJbVmbe9ASaZT_GwtriANTWKFSeUNquo1NQDGBhoowXF8VWEQ5oIOzyyJ48cc3KqAB9Mfg8ZwKq4VwFsD4vC83n3u9V1Xud_4X0SkSgfQxY=s0-d-e1-ft#https://support.riverbed.com/content/dam/images/rb-support-logo.png')
       expect(body.element(:css => "h1").text).to eq("Dear Customer,")
       ps =  body.elements(:css => "p")
       expected_texts = ["Please find the report #{report_name} attached to this email.", "This is a report email from XMS-Cloud. You received this email because #{@username} requested this report be sent to you.", "Sincerely,\nCambium Networks Support\nsupport.cambiumnetworks.com"]

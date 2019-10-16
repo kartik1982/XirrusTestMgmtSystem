@@ -23,7 +23,7 @@ OptionParser.new do |opts|
   opts.on("--browser_name BROWSERNAME"){|obj| options[:browser_name]=obj}
   opts.on("--ui GUIENABLED"){|obj| options[:ui]=obj}
   opts.on("--telnet TELNET"){|obj| options[:telnet]=obj}
-  opts.on("--skip_api TELNET"){|obj| options[:skip_api]=obj}
+  opts.on("--skip_api SKIPAPI"){|obj| options[:skip_api]=obj}
   opts.on("--remote_report RemoteREPORTINGENABLED"){|obj| options[:remote_report]=obj}
   opts.on("--serial SERIAL","Please Provide an Array Serial"){|obj| options[:serial] = obj}
 end.parse!
@@ -50,7 +50,8 @@ settings={
   project_id: options[:project_id],
   testcycle_id: options[:testcycle_id],
   release_id: options[:release_id],
-  array_serial: array_serial
+  array_serial: array_serial,
+  skip_api: options[:skip_api]
  }
 spec = options[:spec]
 #spec= "TS_Profiles/TC_Profile_01_spec.rb"

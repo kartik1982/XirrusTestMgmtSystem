@@ -12,21 +12,17 @@ describe "*******TESTCASE: PUBLIC API FOR EASYPASS ************" do
   voucher=nil
   before :all do    
      @papi= public_api
-     portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
-     profile_load = { name: profile_name, description: "Description for "+profile_name} 
-     @api.post_profile(profile_load) 
-     #create Self Registration portal 
-     @api.post_add_easypass_portal(portal_load)
-     #Create Onboarding portal
-     @api.post_add_easypass_portal(onboarding_portal)
-     #create Voucher portal
-     @api.post_add_easypass_portal(voucher_portal)
-  end
-  after :all do
-    vouchers = JSON.parse(@papi.get_vouchers_from_easypass_portal(voucher_portal[:name]).body)
-    vouchers.each do |vouch|
-      @papi.delete_voucher_from_easypass_portal_with_access_code(voucher_portal[:name], vouch['accessCode'])
-    end
+     if @env != "preview"
+       portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
+       profile_load = { name: profile_name, description: "Description for "+profile_name} 
+       @api.post_profile(profile_load) 
+       #create Self Registration portal 
+       @api.post_add_easypass_portal(portal_load)
+       #Create Onboarding portal
+       @api.post_add_easypass_portal(onboarding_portal)
+       #create Voucher portal
+       @api.post_add_easypass_portal(voucher_portal)
+     end
   end
 
   it "verify public API to get list of all easypass portals" do
@@ -139,4 +135,10 @@ describe "*******TESTCASE: PUBLIC API FOR EASYPASS ************" do
     expect(response.code).to eq(200)
     expect(JSON.parse(response.body)).to eq("PSK deleted")
   end  
+  it "delete all vouchers from portal" do
+    vouchers = JSON.parse(@papi.get_vouchers_from_easypass_portal(voucher_portal[:name]).body)
+    vouchers.each do |vouch|
+      @papi.delete_voucher_from_easypass_portal_with_access_code(voucher_portal[:name], vouch['accessCode'])
+    end
+  end
 end

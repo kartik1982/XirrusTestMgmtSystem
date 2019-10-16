@@ -27,23 +27,23 @@ class SSHSession
     end
     def execute(command)  
       puts "COMMAND: #{command}"    
-      output= @session.exec!("cd XirrusTestMgmtSystem; sudo -S <<< 'Xirrus!23' #{command}")
+      output= @session.exec!("cd XirrusTestMgmtSystem; #{command}")
       puts "OUTPUT FROM SSH COMMAND: #{output}"
       return output
     end  
     def bundle_install
-      execute("bundle install")
+      execute("sudo -S <<< 'Xirrus!23' bundle install")
     end  
     def get_latest_code
       execute("git pull origin master")
     end
     def install_essentials
-      execute("apt-get install build-essential patch ruby-dev zlib1g-dev liblzma-dev")
+      execute("sudo -S <<< 'Xirrus!23' apt-get install build-essential patch ruby-dev zlib1g-dev liblzma-dev")
     end
   end
   #UPDATE ALL LINUX SERVERS - 10-10-2019
   begin
-    linux_servers =["10.100.185.35", "10.100.185.49", "10.100.185.45", "10.100.185.48", "10.100.185.52"]
+    linux_servers = ["10.100.185.35", "10.100.185.49", "10.100.185.45", "10.100.185.48", "10.100.185.52"]
     linux_servers.each do |server_ip|
       session = SSHSession.new({srvr_ip: server_ip, srvr_user: "xirrus", srvr_password: "Xirrus!23"})
       session.get_latest_code

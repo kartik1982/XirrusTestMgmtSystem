@@ -8,10 +8,12 @@ describe "*******TESTCASE: PUBLIC API FOR PROFILES ************" do
 
   before :all do    
      @papi= public_api
-     portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
-     profile_load = { name: profile_name, description: "Description for "+profile_name}  
-     @api.post_add_easypass_portal(portal_load)
-     @api.post_profile(profile_load) 
+     if @env != "preview"
+       portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
+       profile_load = { name: profile_name, description: "Description for "+profile_name}  
+       @api.post_add_easypass_portal(portal_load)
+       @api.post_profile(profile_load) 
+     end     
   end
   it "verify public API to unassign access points from profile" do
     array_id = @papi.cust_get_accesspoint_id_by_serial(ap_serial)

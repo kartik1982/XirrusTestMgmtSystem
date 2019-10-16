@@ -5,19 +5,21 @@ describe "*******TESTCASE: PUBLIC API FOR DOMAINS ************" do
   group=nil
   before :all do    
      @papi= public_api
-     group_load = { name: group_name, description: "Description for "+group_name}
-     @api.post_add_group(group_load)
-     sleep 2
-     groups = JSON.parse(@api.get_groups.body)['data']
-     groups.each do |item|
-       if item.value?(group_name)
-         group = item
-         break
-       end
-     end  
-     array_id = JSON.parse(@api.get_array_by_serial(ap_serial))['id']
-     res = @api.put_add_aps_to_group(group['id'], [array_id])  
-     puts res.body     
+     if @env != "preview"
+       group_load = { name: group_name, description: "Description for "+group_name}
+       @api.post_add_group(group_load)
+       sleep 2
+       groups = JSON.parse(@api.get_groups.body)['data']
+       groups.each do |item|
+         if item.value?(group_name)
+           group = item
+           break
+         end
+       end  
+       array_id = JSON.parse(@api.get_array_by_serial(ap_serial))['id']
+       res = @api.put_add_aps_to_group(group['id'], [array_id])  
+       puts res.body  
+     end        
   end
   it "verify public API to get list of all groups" do
     response = @papi.get_all_groups

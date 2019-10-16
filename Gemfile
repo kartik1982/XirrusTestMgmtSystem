@@ -18,4 +18,5 @@ gem 'httparty'
 gem "time_diff"
 gem 'gmail', '~> 0.6.0'
 gem 'nokogiri', '~> 1.10', '>= 1.10.4'
+gem 'openssl'
 

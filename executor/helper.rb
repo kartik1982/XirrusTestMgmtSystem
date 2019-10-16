@@ -14,6 +14,7 @@ require 'csv'
 require 'gmail'
 require 'nokogiri'
 require 'active_support/time'
+require 'openssl'
 
 require_relative "spec_runner.rb"
 require_relative "../api/api_client/api_client.rb"
@@ -74,17 +75,15 @@ def get_entitlement_api_args
         username: @username,
         password:@password,
         host: @login_url,
-        ent_url: "https://test03-api-94151060.cloud.xirrus.com",
+        ent_url: "https://prod1-lb-api-32063211.cloud.xirrus.com",
         ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
   }
   when "preview"
-    # $VERBOSE = nil
-    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
     args={
         username: @username,
         password:@password,
         host: @login_url,
-        ent_url: "https://test03-api-94151060.cloud.xirrus.com",
+        ent_url: "https://prev-prd1-api-923206858.cloud.xirrus.com",
         ent_load: { product: "ENTITLEMENTS", scope: "READ_WRITE"}
     }
   when "test03"

@@ -7,6 +7,8 @@ require 'resource/groups'
 require 'resource/profiles'
 require 'resource/easypass'
 module API
+    $VERBOSE = nil
+    OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
   class PublicApi < API::ApiClient 
     attr_accessor :papi_url, :papi_token, :x_api_key
     include AccessPoints

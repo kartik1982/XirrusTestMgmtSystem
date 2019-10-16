@@ -15,8 +15,6 @@ def get_public_api_args
         papi_load: { product: "PAPI", scope: "READ_WRITE"}
   }
   when "preview"
-    # $VERBOSE = nil
-    # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
     args={
         username: @username,
         password:@password,

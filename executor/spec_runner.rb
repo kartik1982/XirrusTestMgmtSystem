@@ -29,6 +29,8 @@ module EXECUTOR
      env == "test03"
     elsif testcycle_id =="Regression"
       env = "test01"
+    elsif testcycle_id =="Preview"
+      env = "preview"
     end
     username = args[:username] || DEFAULT_USER
     password = args[:password] || DEFAULT_PASSWORD
@@ -155,7 +157,11 @@ module EXECUTOR
            @build_id = spec_settings[:build_id]
            puts "Enviornment: #{@env}"
            @xms_url = "https://xcs-#{@env}.cloud.xirrus.com"
-           @login_url = "https://login-#{@env}.cloud.xirrus.com"
+           if @env == "preview"
+             @login_url = "https://login-#{@env}.xirrus.com"
+           else
+             @login_url = "https://login-#{@env}.cloud.xirrus.com"
+           end
            puts "LOGIN_URL: #{@login_url}"
            @username = spec_settings[:username]
            @password = spec_settings[:password]
@@ -206,7 +212,7 @@ module EXECUTOR
              File.open(@log_file,'w'){|f| f.write("\n-------------- Logging RSpec -------------\n  Timestamp: #{@timestamp} \n #{spec_settings[:array_serial]} - #{spec_settings[:browser_name]} \n")}
            end
            puts "SKIP API: #{spec_settings[:skip_api]}"
-           if (spec_settings[:skip_api] != true)
+           if (spec_settings[:skip_api] != "true")
               @api = api
             else
               @login_url = @xms_url
