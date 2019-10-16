@@ -3,7 +3,7 @@ require_relative "../../../../api/public_api/public_api.rb"
 def get_public_api_args
   env = @env
   case env
-  when "production"
+  when "prod"
   args={
         username: @username,
         password:@password,

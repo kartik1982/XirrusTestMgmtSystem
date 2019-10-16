@@ -31,6 +31,8 @@ module EXECUTOR
       env = "test01"
     elsif testcycle_id =="Preview"
       env = "preview"
+    elsif testcycle_id =="Production"
+      env = "prod"
     end
     username = args[:username] || DEFAULT_USER
     password = args[:password] || DEFAULT_PASSWORD
@@ -156,12 +158,16 @@ module EXECUTOR
            @env = spec_settings[:env]
            @build_id = spec_settings[:build_id]
            puts "Enviornment: #{@env}"
-           @xms_url = "https://xcs-#{@env}.cloud.xirrus.com"
-           if @env == "preview"
+           if @env == "prod"
+             @xms_url = "https://xcs.cloud.xirrus.com"
+             @login_url = "https://login.xirrus.com"
+           elsif @env == "preview"
+             @xms_url = "https://xcs-#{@env}.cloud.xirrus.com"
              @login_url = "https://login-#{@env}.xirrus.com"
-           else
+           else 
+             @xms_url = "https://xcs-#{@env}.cloud.xirrus.com"
              @login_url = "https://login-#{@env}.cloud.xirrus.com"
-           end
+           end  
            puts "LOGIN_URL: #{@login_url}"
            @username = spec_settings[:username]
            @password = spec_settings[:password]
@@ -214,8 +220,8 @@ module EXECUTOR
            puts "SKIP API: #{spec_settings[:skip_api]}"
            if (spec_settings[:skip_api] != "true")
               @api = api
-            else
-              @login_url = @xms_url
+            # else
+              # @login_url = @xms_url
            end
            puts "UI: #{spec_settings[:ui]}"
            @browser_name = spec_settings[:browser_name] || BROWSER_NAME

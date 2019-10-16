@@ -7,10 +7,10 @@ describe "*******TESTCASE: PUBLIC API FOR ACCESS POINTS ************" do
         ap_serial = "X30744903864E"
         ap_host_name = "Host-X30744903864E"
         ap_location = "SQA-WALL-SETUP"
-      elsif @env=="production"
-        ap_serial = "X30744903864E"
-        ap_host_name = "HOst-Test01-X30744903864E"
-        ap_location = "Test03-Setup-Desk"
+      elsif @env=="prod"
+        ap_serial = "X2187488B5C22"
+        ap_host_name = "Host-X2187488B5C22"
+        ap_location = "SQA-DESKTOP"
       end
   end
   it "verify public API to get status of all access point for tenant" do
