@@ -3,23 +3,26 @@ describe "*******TESTCASE: PUBLIC API FOR DOMAINS ************" do
   group_name = "Public_API_Group"
   ap_serial = "X30744903864E"
   group=nil
-  before :all do    
+  before :all do 
+     if @env=="test03" || @env=="test01" || @env=="preview"
+        ap_serial = "X30744903864E"
+     elsif @env=="prod"
+       ap_serial = "X2187488B5C22"
+     end   
      @papi= public_api
-     if @env != "preview"
-       group_load = { name: group_name, description: "Description for "+group_name}
-       @api.post_add_group(group_load)
-       sleep 2
-       groups = JSON.parse(@api.get_groups.body)['data']
-       groups.each do |item|
-         if item.value?(group_name)
-           group = item
-           break
-         end
-       end  
-       array_id = JSON.parse(@api.get_array_by_serial(ap_serial))['id']
-       res = @api.put_add_aps_to_group(group['id'], [array_id])  
-       puts res.body  
-     end        
+     group_load = { name: group_name, description: "Description for "+group_name}
+     @api.post_add_group(group_load)
+     sleep 2
+     groups = JSON.parse(@api.get_groups.body)['data']
+     groups.each do |item|
+       if item.value?(group_name)
+         group = item
+         break
+       end
+     end  
+     array_id = JSON.parse(@api.get_array_by_serial(ap_serial))['id']
+     res = @api.put_add_aps_to_group(group['id'], [array_id])  
+     puts res.body       
   end
   it "verify public API to get list of all groups" do
     response = @papi.get_all_groups

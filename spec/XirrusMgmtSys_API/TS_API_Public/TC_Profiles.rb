@@ -6,14 +6,17 @@ describe "*******TESTCASE: PUBLIC API FOR PROFILES ************" do
   ap_serial = "X30744903864E"
   array_id= nil
 
-  before :all do    
-     @papi= public_api
-     if @env != "preview"
-       portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
-       profile_load = { name: profile_name, description: "Description for "+profile_name}  
-       @api.post_add_easypass_portal(portal_load)
-       @api.post_profile(profile_load) 
-     end     
+  before :all do 
+    if @env=="test03" || @env=="test01" || @env=="preview"
+      ap_serial = "X30744903864E"
+   elsif @env=="prod"
+     ap_serial = "X2187488B5C22"
+   end     
+   @papi= public_api
+   portal_load = {name: portal_name, description: "Description for "+portal_name, type: "SECRETARY"}
+   profile_load = { name: profile_name, description: "Description for "+profile_name}  
+   @api.post_add_easypass_portal(portal_load)
+   @api.post_profile(profile_load)   
   end
   it "verify public API to unassign access points from profile" do
     array_id = @papi.cust_get_accesspoint_id_by_serial(ap_serial)

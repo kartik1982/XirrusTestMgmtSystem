@@ -168,6 +168,7 @@ module API
         response
       rescue => e
           puts  e.message
+          puts e.response
           response = e.response
       end      
     end
